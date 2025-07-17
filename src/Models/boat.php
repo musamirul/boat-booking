@@ -31,6 +31,11 @@
             $stmt = $this->conn->prepare("DELETE FROM {$this->table} WHERE boat_id = ?");
             return $stmt->execute([$id]);
         }
+
+        public function countAll(): int {
+            $stmt = $this->conn->query("SELECT COUNT(*) FROM {$this->table}");
+            return (int) $stmt->fetchColumn();
+        }
     }
 
 ?>

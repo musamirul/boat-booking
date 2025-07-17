@@ -46,4 +46,9 @@ class Schedule {
         $stmt = $this->conn->prepare("DELETE FROM {$this->table} WHERE schedule_id = ?");
         return $stmt->execute([$scheduleId]);
     }
+
+    public function countAll(): int {
+        $stmt = $this->conn->query("SELECT COUNT(*) FROM {$this->table}");
+        return (int) $stmt->fetchColumn();
+    }
 }
