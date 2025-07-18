@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteBase /boat-booking/public/
+
+# If the request starts with /api, route to api/index.php
+RewriteCond %{REQUEST_URI} ^/boat-booking/public/api/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/ api/index.php [QSA,L]
+
+# Otherwise route all other requests to frontend index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
