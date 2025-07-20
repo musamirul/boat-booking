@@ -22,9 +22,9 @@
             return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
         }
 
-        public function create(string $name, string $description): bool{
-            $stmt = $this->conn->prepare("INSERT INTO {$this->table} (name, description) VALUES (?,?)");
-            return $stmt->execute([$name, $description]);
+        public function create(string $name, int $capacity): bool{
+            $stmt = $this->conn->prepare("INSERT INTO {$this->table} (name, capacity,status) VALUES (?,?,?)");
+            return $stmt->execute([$name, $capacity,'active']);
         }
 
         public function delete(int $id): bool{
