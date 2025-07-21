@@ -5,23 +5,48 @@
 
     header('Content-Type: application/json');
     header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Header: Content-Type');
+    header('Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS');
 
-    //Read raw Post JSON
-    $input = json_decode(file_get_contents('php://input'), true);
-
-    //Validate input
-    if(!isset($input['user_id'])){
-        echo json_encode(['error' => 'Missing user_id']);
-        exit;
-    }
 
     $booking = new Bookings($db);
-    $bookingId = $booking->createFromApi((int) $input['user_id']);
+    
+    $method = $_SERVER['REQUEST_METHOD'];
 
-    // echo json_encode($booking->getAll());
-    if($bookingId){
-        echo json_encode(['success' => true, 'booking_id' => $bookingId]);
-    }else{
-        echo json_encode(['error' => 'failed to create booking']);
+    if ($method === 'GET') {
+        // ✅ Fetch all bookings
+        echo json_encode($booking->getAllWithDetails());
+    
+    } elseif ($method === 'POST') {
+        // ✅ Create a new booking
+        $input = json_decode(file_get_contents('php://input'), true);
+    
+        if (!isset($input['user_id'])) {
+            echo json_encode(['error' => 'Missing user_id']);
+            exit;
+        }
+    
+        $bookingId = $booking->createFromApi((int) $input['user_id'], $input['items'] ?? []);
+    
+        if ($bookingId) {
+            echo json_encode(['success' => true, 'booking_id' => $bookingId]);
+        } else {
+            echo json_encode(['error' => 'Failed to create booking']);
+        }
+    
+    } elseif ($method === 'PATCH') {
+        // ✅ Update booking status (optional)
+        $input = json_decode(file_get_contents('php://input'), true);
+    
+        if (!isset($input['booking_id'], $input['status'])) {
+            echo json_encode(['error' => 'Missing booking_id or status']);
+            exit;
+        }
+    
+        $success = $booking->updateStatus((int) $input['booking_id'], $input['status']);
+        echo json_encode(['success' => $success]);
+    
+    } else {
+        http_response_code(405); // Method Not Allowed
+        echo json_encode(['error' => 'Method not allowed']);
     }
