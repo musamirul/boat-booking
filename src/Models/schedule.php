@@ -51,4 +51,27 @@ class Schedule {
         $stmt = $this->conn->query("SELECT COUNT(*) FROM {$this->table}");
         return (int) $stmt->fetchColumn();
     }
+
+    public function createWithPrices(int $boat_id, string $departure_time,array $prices): bool{
+        try {
+            $this->conn->beginTransaction();
+
+            //Insert Schedule
+            $stmt = $this->conn->prepare("INSERT INTO ($this->table) (boat_id, departure_time,status) VALUES (?,?,'active')");
+            $stmt->execute([$boat_id, $departure_time]);
+            $scheduleId = $this->conn->lastInsertId();
+
+            //Insert Prices
+            $stmt_price = $this->conn->prepare("INSERT INTO schedule_prices (schedule_id, ticket_type_id, price) VALUES (?,?,?)");
+            foreach ($prices as $price){
+                $stmt_price->execute([$scheduleId,$price['ticket_type_id'], $price['price']]);
+            }
+
+
+        }catch(\Exception $e){
+            $this->conn->rollBack();
+            error_log("Error in createWithPrices: ". $e->getMessage());
+            return null;
+        }
+    }
 }

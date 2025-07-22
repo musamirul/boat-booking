@@ -90,7 +90,7 @@ function ScheduleForm(){
             </div>
 
             <div>
-                <label>Availalbe Seats:</label>
+                <label>Available Seats:</label>
                 <input type='number' value={availableSeats}
                 onChange={(e)=> setAvailableSeats(e.target.value)}
                 className='block w-full border p-2'/>
