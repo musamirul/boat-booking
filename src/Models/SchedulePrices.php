@@ -22,11 +22,10 @@
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        public function setPrice(int $scheduleId, string $ticketTypeId, float $price): bool{
+        public function setPrice(int $scheduleId, int $ticketTypeId, float $price): bool{
             $stmt = $this->conn->prepare(
                 "INSERT INTO {$this->table} (schedule_id, ticket_type_id, price) 
-                    VALUES (?,?,?) 
-                    ON DUPLICATE KEY UPDATE price = VALUES(price)");
+                    VALUES (?,?,?)");
             return $stmt->execute([$scheduleId, $ticketTypeId, $price]);
         }
         
