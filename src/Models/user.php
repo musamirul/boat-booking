@@ -22,4 +22,15 @@ class User {
         $stmt = $this->conn->query("SELECT COUNT(*) FROM {$this->table}");
         return (int) $stmt->fetchColumn();
     }
+
+    public function findByEmail(string $email):?array{
+        $stmt=$this->conn->prepare("SELECT * FROM {$this->table} WHERE email = ?");
+        $stmt->execute([$email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
+    public function create(string $name, string $email, string $password): bool{
+        $stmt = $this->conn->prepare("INSERT INTO {$this->table} (name,email,password) VALUES (?,?,?)");
+        return $stmt->execute([$name,$email,$password]);
+    }
 }
