@@ -39,5 +39,45 @@
         echo json_encode($boats);
         exit;
     }
+
+    //Delete boats by id
+    if($method === 'DELETE'){
+        $boatId = $_GET['id'] ?? null;
+
+        if(!$boatId){
+            $data = json_decode(file_get_contents('php://input'),true);
+            $boatId = $data['boat_id'] ?? null;
+        }
+
+        if(!$boatId){
+            http_response_code(400);
+            echo json_encode(['error' => 'Missing boat_id']);
+            exit;
+        }
+
+        $success = $boatModel->delete((int) $boatId);
+        echo json_encode(['success'=>$success]);
+        exit;
+    }
+
+
+    //Update Boat
+    if($method === 'PUT'){
+        $data = json_decode(file_get_contents('php://input'),true);
+        if(!isset($data['boat_id'], $data['name'], $data['capacity'], $data['status'])){
+            echo json_encode(['error'=>'Missing fields']);
+            exit;
+        }
+
+        $success = $boatModel->update(
+            (int) $data['boat_id'],
+            $data['name'],
+            (int) $data['capacity'],
+            $data['status']
+        );
+
+        echo json_encode(['success'=>$success]);
+        exit;
+    }
     http_respond_code(405);
     echo json_encode(['error' => 'Method Not allowed']);

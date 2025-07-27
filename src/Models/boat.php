@@ -27,6 +27,10 @@
             return $stmt->execute([$name, $capacity,'active']);
         }
 
+        public function update(int $boat_id, string $name, int $capacity, string $status): bool{
+            $stmt = $this->conn->prepare("UPDATE {$this->table} SET name = ?, capacity=?, status=? WHERE boat_id = ?");
+            return $stmt->execute([$name, $capacity, $status, $boat_id]);
+        }
         public function delete(int $id): bool{
             $stmt = $this->conn->prepare("DELETE FROM {$this->table} WHERE boat_id = ?");
             return $stmt->execute([$id]);

@@ -18,10 +18,9 @@ function BookingList(){
 
     return (
         <div className='BORDER p-4'>
-            <h2 className='text-xl font-bold mb-4'>All Bookings</h2>
-            <ul className='space-y-2'>
+            <ul className='space-y-2 '>
                 {bookings.map((b) => (
-                    <li key={b.booking_id} className='border p-2 rounded shadow'>
+                    <li key={b.booking_id} className='bg-white dark:bg-gray-700 p-4 rounded-xl shadow hover:shadow-lg'>
                         <div><b>Booking ID:</b> {b.booking_id}</div>
                         <div><b>User:</b> {b.user_name} (ID: {b.user_id})</div>
                         <div><b>Status:</b> {b.status}</div>

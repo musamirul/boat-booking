@@ -66,7 +66,7 @@ function ScheduleForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded space-y-4">
+    <form onSubmit={handleSubmit} className="p-4 space-y-4 bg-white dark:bg-gray-700 p-4 rounded-xl shadow hover:shadow-lg">
       <h2 className="text-lg font-bold">Create New Schedule</h2>
 
       <div>
