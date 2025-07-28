@@ -16,6 +16,8 @@ import AdminDashboard from "./components/AdminDashboard";
 import AdminLayout from "./components/layouts/AdminLayout";
 import SchedulePage from "./components/SchedulePage";
 import TicketTypesPage from "./components/TicketTypesPage";
+import SchedulesPage from "./components/SchedulePage";
+import ScheduleList from "./components/ScheduleList";
 
 function App() {
   const { role, logout } = useAuth();
@@ -58,9 +60,11 @@ function App() {
             <Route index element={<AdminDashboard />} /> {/* default admin page */}
             <Route path="boats" element={<BoatPage />} />
             <Route path="bookings" element={<AdminRoute><BookingList /></AdminRoute>} />
-            <Route path="schedule" element={<ScheduleForm />} />
+            <Route path="scheduleform" element={<ScheduleForm />} />
             <Route path="ticket-types" element={<AdminRoute><TicketTypesPage /></AdminRoute>} />
-            <Route path="schedule/:scheduleId" element={<SchedulePriceList />} />
+            <Route path="schedule" element={<AdminRoute><SchedulesPage /></AdminRoute>} />
+            <Route path="schedulelist" element={<AdminRoute><ScheduleList /></AdminRoute>} />
+            <Route path="schedule/:scheduleId" element={<AdminRoute><SchedulePriceList/></AdminRoute>} />
           </Route>
         </Routes>
       </div>

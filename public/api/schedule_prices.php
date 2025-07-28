@@ -1,58 +1,66 @@
 <?php
 require_once __DIR__ . '/../../init.php';
+use App\Models\SchedulePrice;
 
-use App\Models\SchedulePrices;
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS');
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Content-Type: application/json");
-
-// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
 
-$schedulePrices = new SchedulePrices($db);
-$method = $_SERVER['REQUEST_METHOD'];
+$schedulePrice = new SchedulePrice($db);
 
-$data = json_decode(file_get_contents('php://input'), true);
-file_put_contents('log_schedule_price.txt', json_encode($data) . PHP_EOL, FILE_APPEND);
+// ✅ GET prices for a schedule
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $scheduleId = $_GET['schedule_id'] ?? null;
+    if (!$scheduleId) {
+        echo json_encode(['error' => 'Schedule ID is required']);
+        exit;
+    }
+    echo json_encode($schedulePrice->getBySchedule((int)$scheduleId));
+    exit;
+}
 
-if ($method === 'POST') {
+// ✅ POST create new price
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
+    if (empty($data['schedule_id']) || empty($data['ticket_type_id']) || empty($data['price'])) {
+        echo json_encode(['error' => 'Missing fields']);
+        exit;
+    }
+    $success = $schedulePrice->create((int)$data['schedule_id'], (int)$data['ticket_type_id'], (float)$data['price']);
+    echo json_encode(['success' => $success]);
+    exit;
+}
 
-    file_put_contents('log.txt', json_encode($data) . PHP_EOL, FILE_APPEND); // 👈 add this
-
-    if (!isset($data['schedule_id'], $data['ticket_type_id'], $data['price'])) {
+// ✅ PATCH update price
+if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    if (!isset($data['schedule_price_id'], $data['price'])) {
         echo json_encode(['error' => 'Missing fields']);
         exit;
     }
 
-    $success = $schedulePrices->setPrice(
-        (int)$data['schedule_id'],
-        (int)$data['ticket_type_id'],
-        (float)$data['price']
-    );
-
-    if ($success) {
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['error' => 'Failed to create schedule']);
-    }
+    $success = $schedulePrice->update((int)$data['schedule_price_id'], (float)$data['price']);
+    echo json_encode(['success' => $success]);
     exit;
 }
 
-if ($method === 'GET') {
-    if (!isset($_GET['schedule_id'])) {
-        echo json_encode(['error' => 'Missing schedule_id']);
+// ✅ DELETE remove price
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    $id = $_GET['id'] ?? null;
+    if (!$id) {
+        echo json_encode(['error' => 'ID is required']);
         exit;
     }
-
-    $scheduleId = (int)$_GET['schedule_id'];
-    $prices = $schedulePrices->getByScheduleId($scheduleId);
-
-    echo json_encode(['prices' => $prices]);
+    $success = $schedulePrice->delete((int)$id);
+    echo json_encode(['success' => $success]);
     exit;
 }
+
+http_response_code(405);
+echo json_encode(['error' => 'Method Not Allowed']);

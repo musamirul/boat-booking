@@ -13,7 +13,9 @@ export default function AdminLayout() {
     { key: "dashboard", label: "Dashboard", path: "/admin" },
     { key: "boats", label: "Boats", path: "/admin/boats" },
     { key: "bookings", label: "Bookings", path: "/admin/bookings" },
+    { key: "scheduleform", label: "Schedules Form", path: "/admin/scheduleform" },
     { key: "schedule", label: "Schedules", path: "/admin/schedule" },
+    { key: "schedulelist", label: "Schedules List", path: "/admin/schedulelist" },
     { key: "ticketTypes", label: "Ticket Types", path: "/admin/ticket-types" },
   ];
 
