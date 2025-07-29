@@ -9,3 +9,6 @@ export const deleteSchedule = (id) =>
 
 export const updateSchedule = (data) => 
     axios.patch(`${BASE_URL}/schedules.php`, data);
+
+export const addSchedule = (schedule) =>
+    axios.post(`${BASE_URL}/schedules.php`,schedule);

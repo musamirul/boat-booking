@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999; /* 👈 ensures modal is on top */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-box {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 24rem;
+    z-index: 10000;
+  }

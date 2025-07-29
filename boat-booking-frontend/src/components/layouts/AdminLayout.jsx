@@ -16,6 +16,7 @@ export default function AdminLayout() {
     { key: "scheduleform", label: "Schedules Form", path: "/admin/scheduleform" },
     { key: "schedule", label: "Schedules", path: "/admin/schedule" },
     { key: "schedulelist", label: "Schedules List", path: "/admin/schedulelist" },
+    { key: "schedulecalendar", label: "Schedules Calendar", path: "/admin/schedulecalendar" },
     { key: "ticketTypes", label: "Ticket Types", path: "/admin/ticket-types" },
   ];
 

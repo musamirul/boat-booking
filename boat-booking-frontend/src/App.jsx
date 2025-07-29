@@ -18,6 +18,7 @@ import SchedulePage from "./components/SchedulePage";
 import TicketTypesPage from "./components/TicketTypesPage";
 import SchedulesPage from "./components/SchedulePage";
 import ScheduleList from "./components/ScheduleList";
+import BookingCalendar from "./components/BookingCalendar";
 
 function App() {
   const { role, logout } = useAuth();
@@ -64,6 +65,7 @@ function App() {
             <Route path="ticket-types" element={<AdminRoute><TicketTypesPage /></AdminRoute>} />
             <Route path="schedule" element={<AdminRoute><SchedulesPage /></AdminRoute>} />
             <Route path="schedulelist" element={<AdminRoute><ScheduleList /></AdminRoute>} />
+            <Route path="schedulecalendar" element={<AdminRoute><BookingCalendar /></AdminRoute>} />
             <Route path="schedule/:scheduleId" element={<AdminRoute><SchedulePriceList/></AdminRoute>} />
           </Route>
         </Routes>
