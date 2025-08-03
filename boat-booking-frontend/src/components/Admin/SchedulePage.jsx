@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSchedules, deleteSchedule } from "../api/schedules";
+import { getSchedules, deleteSchedule } from "../../api/schedules";
 
 export default function SchedulesPage() {
   const [schedules, setSchedules] = useState([]);

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { getSchedules, addSchedule, updateSchedule } from "../api/schedules";
-import { getBoats } from "../api/boats";
+import { getSchedules, addSchedule, updateSchedule } from "../../api/schedules";
+import { getBoats } from "../../api/boats";
 import { createPortal } from "react-dom";
 
 

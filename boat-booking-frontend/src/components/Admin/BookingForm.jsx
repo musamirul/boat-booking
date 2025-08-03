@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createBooking } from '../api/booking';
+import { createBooking } from '../../api/booking';
 
 function BookingForm(){
     const [user_id, setUserId] = useState('');

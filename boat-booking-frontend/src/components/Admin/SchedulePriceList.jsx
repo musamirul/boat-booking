@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getSchedulePrices, updatePrice, addPrice } from "../api/schedulePrices";
+import { getSchedulePrices, updatePrice, addPrice } from "../../api/schedulePrices";
 import Modal from "./Modal"; // ✅ simple modal component
 
 export default function SchedulePriceList() {

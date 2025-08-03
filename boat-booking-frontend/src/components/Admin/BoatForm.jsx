@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createBoat } from '../api/boats';
+import { createBoat } from '../../api/boats';
 
 function BoatForm(){
     const [name, setName] = useState("");

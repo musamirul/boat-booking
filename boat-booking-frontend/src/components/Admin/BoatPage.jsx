@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getBoats, createBoat, updateBoat, deleteBoat } from "../api/boats";
+import { getBoats, createBoat, updateBoat, deleteBoat } from "../../api/boats";
 
 export default function BoatPage() {
   const [boats, setBoats] = useState([]);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTicketTypes, createTicketType, updateTicketType, deleteTicketType } from "../api/ticketTypes";
+import { getTicketTypes, createTicketType, updateTicketType, deleteTicketType } from "../../api/ticketTypes";
 
 export default function TicketTypesPage() {
   const [ticketTypes, setTicketTypes] = useState([]);

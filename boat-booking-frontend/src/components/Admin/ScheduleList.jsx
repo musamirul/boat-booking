@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { getSchedules, updateSchedule } from "../api/schedules";
-import { getBoats } from "../api/boats";
-import { getTicketTypes } from "../api/ticketTypes";
-import { updateSchedulePrice, addSchedulePrice } from "../api/schedulePrices";
+import { getSchedules, updateSchedule } from "../../api/schedules";
+import { getBoats } from "../../api/boats";
+import { getTicketTypes } from "../../api/ticketTypes";
+import { updateSchedulePrice, addSchedulePrice } from "../../api/schedulePrices";
 
 export default function ScheduleList() {
   const [schedules, setSchedules] = useState([]);

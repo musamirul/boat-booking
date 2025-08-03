@@ -10,3 +10,9 @@ export const createBooking = (data) =>
 
 export const updateBookingStatus = (id, status) =>
   axios.patch(`${BASE_URL}/bookings.php`, { booking_id: id, status });
+
+// Get user existing bookings
+export const getUserBookings = ()=>
+  axios.get(`${BASE_URL}/bookings.php?user_id=1`);
+
+

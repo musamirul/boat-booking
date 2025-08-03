@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getBoats } from '../api/boats';
-import { createSchedule, addSchedulePrice } from '../api/schedule';
+import { getBoats } from '../../api/boats';
+import { createSchedule, addSchedulePrice } from '../../api/schedule';
 
 function ScheduleForm() {
   const [boats, setBoats] = useState([]);

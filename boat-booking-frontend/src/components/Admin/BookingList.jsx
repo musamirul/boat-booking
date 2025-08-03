@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getBookings  } from '../api/booking';
+import { getBookings  } from '../../api/booking';
 
 function BookingList(){
     const [bookings, setBookings] = useState([]);
