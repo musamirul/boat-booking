@@ -1,9 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import BookingForm from "./components/Admin/BookingForm";
-import BoatForm from "./components/Admin/BoatForm";
-import BookingList from "./components/Admin/BookingList";
-import ScheduleForm from "./components/Admin/ScheduleForm";
-import SchedulePriceList from "./components/Admin/SchedulePriceList";
+import BookingForm from "./pages/user/BookingForm";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import AdminRoute from "./components/AdminRoute";
@@ -11,15 +7,26 @@ import UserRoute from "./components/UserRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
 import { useAuth } from "./components/AuthContext";
-import BoatPage from "./components/Admin/BoatPage";
-import AdminDashboard from "./components/Admin/AdminDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLayout from "./components/layouts/AdminLayout";
-import SchedulePage from "./components/Admin/SchedulePage";
-import TicketTypesPage from "./components/Admin/TicketTypesPage";
-import SchedulesPage from "./components/Admin/SchedulePage";
-import ScheduleList from "./components/Admin/ScheduleList";
-import BookingCalendar from "./components/Admin/BookingCalendar";
-import UserDashboard from "./components/User/UserDashboard"; 
+import ManageSchedules from "./pages/admin/ManageSchedules";
+import ManageBoats from "./pages/admin/ManageBoats";
+import ManageBookings from "./pages/admin/ManageBookings";
+import ManageCreateSchedules from "./pages/admin/ManageCreateSchedules";
+import ManageTicketTypes from "./pages/admin/ManageTicketTypes";
+import ManageScheduleForm from "./pages/admin/ManageScheduleForm";
+import ManageScheduleList from "./pages/admin/ManageScheduleList";
+import ManageScheduleCalendar from "./pages/admin/ManageScheduleCalendar";
+import ManageSchedulePriceList from "./pages/admin/ManageSchedulePriceList";
+
+import UserDashboard from "./pages/user/UserDashboard"; 
+import BookingCart from "./pages/user/BookingCart";
+import BookingConfirm from "./pages/user/BookingConfirm";
+import BookingPayment from "./pages/user/BookingPayment";
+import BookingCalendarUser from "./pages/user/BookingCalendarUser";
+
+
+
 
 function App() {
   const { role, logout } = useAuth();
@@ -30,7 +37,6 @@ function App() {
       <div className="p-4">
         {/* ✅ Top Navbar */}
         <nav className="space-x-4 mb-4">
-          <Link to="/" className="text-blue-600">Booking</Link>
 
           {!isLoggedIn && (
             <>
@@ -39,8 +45,8 @@ function App() {
             </>
           )}
 
-          {role === "user" && <Link to="/user-dashboard" className="text-blue-600">Dashboard</Link>} {/* ✅ added */}
-          {role === "user" && <Link to="/" className="text-blue-600">My Bookings</Link>}
+          {role === "user" && <Link to="/" className="text-blue-600">Dashboard</Link>} {/* ✅ added */}
+          {role === "user" && <Link to="/book" className="text-blue-600">Booking Calendar</Link>}
 
           {role === "admin" && (
             <>
@@ -54,22 +60,26 @@ function App() {
         {/* ✅ Routes */}
         <Routes>
           {/* User Pages */}
-          <Route path="/" element={<UserRoute><BookingForm /></UserRoute>} />
-          <Route path="/user-dashboard" element={<UserRoute><UserDashboard /></UserRoute>} /> {/* ✅ added */}
+          <Route path="/" element={<UserRoute><UserDashboard /></UserRoute>} /> {/* ✅ added */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/book" element={<BookingCalendarUser />} />
+          <Route path="/cart" element={<BookingCart />} />
+          <Route path="/confirm" element={<BookingConfirm />} />
+          <Route path="/payment/:bookingId" element={<BookingPayment />} />
 
           {/* ✅ Admin Routes with Layout */}
           <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
             <Route index element={<AdminDashboard />} /> {/* default admin page */}
-            <Route path="boats" element={<BoatPage />} />
-            <Route path="bookings" element={<AdminRoute><BookingList /></AdminRoute>} />
-            <Route path="scheduleform" element={<ScheduleForm />} />
-            <Route path="ticket-types" element={<AdminRoute><TicketTypesPage /></AdminRoute>} />
-            <Route path="schedule" element={<AdminRoute><SchedulesPage /></AdminRoute>} />
-            <Route path="schedulelist" element={<AdminRoute><ScheduleList /></AdminRoute>} />
-            <Route path="schedulecalendar" element={<AdminRoute><BookingCalendar /></AdminRoute>} />
-            <Route path="schedule/:scheduleId" element={<AdminRoute><SchedulePriceList/></AdminRoute>} />
+            <Route path="boats" element={<ManageBoats />} />
+            <Route path="bookings" element={<AdminRoute><ManageBookings /></AdminRoute>} />
+            <Route path="scheduleform" element={<ManageScheduleForm />} />
+            <Route path="ticket-types" element={<AdminRoute><ManageTicketTypes /></AdminRoute>} />
+            <Route path="schedule" element={<AdminRoute><ManageSchedules /></AdminRoute>} />
+            <Route path="schedulelist" element={<AdminRoute><ManageScheduleList /></AdminRoute>} />
+            <Route path="createschedule" element={<AdminRoute><ManageCreateSchedules /></AdminRoute>} />
+            <Route path="schedulecalendar" element={<AdminRoute><ManageScheduleCalendar /></AdminRoute>} />
+            <Route path="schedule/:scheduleId" element={<AdminRoute><ManageSchedulePriceList/></AdminRoute>} />
           </Route>
         </Routes>
       </div>

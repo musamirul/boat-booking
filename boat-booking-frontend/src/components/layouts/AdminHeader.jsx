@@ -13,6 +13,7 @@ export default function AdminHeader({ darkMode, toggleDarkMode }) {
     "/admin/boats": "Manage Boats",
     "/admin/bookings": "Booking List",
     "/admin/schedule": "Create Schedule",
+    "/admin/createschedule": "Create Schedule",
     "/admin/ticket-types": "Create Ticket",
   };
 

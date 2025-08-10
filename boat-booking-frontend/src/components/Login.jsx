@@ -20,7 +20,7 @@ function Login() {
             }
 
             const userRole = (res.data.user.role || "user").toLowerCase();
-            login(res.data.user.user_id, userRole); // ✅ use context login
+            login(res.data.user.user_id, userRole, res.data.user.name); // ✅ use context login
 
             alert("Login successful!");
             navigate(userRole === "admin" ? "/admin" : "/");
