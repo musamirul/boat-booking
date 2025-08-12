@@ -102,44 +102,65 @@ export default function UserDashboard() {
   return (
     <UserLayout>
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">User Dashboard{userId}</h1>
-
-      {/* My Bookings */}
-      <section>
+    <section>
         <h2 className="text-xl font-semibold mb-3">My Bookings</h2>
-        <table className="w-full border">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border p-2">Booking ID</th>
-              <th className="border p-2">Boat</th>
-              <th className="border p-2">Departure Time</th>
-              <th className="border p-2">Status</th>
-              <th className="border p-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(bookings) && bookings.length > 0 ? (
-              bookings.map(b => (
-                <tr key={b.booking_id}>
-                  <td>{b.booking_id}</td>
-                  <td>{b.boat_name}</td>
-                  <td>{dayjs(b.departure_time).format("YYYY-MM-DD HH:mm")}</td>
-                  <td>{b.status}</td>
-                  <td>
-                    <button className="mt-2 bg-blue-600 text-white px-3 py-1 rounded" onClick={() => openBookingModal(b)}>View</button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="p-4 text-center text-gray-500">
-                  No bookings found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+
+        {Array.isArray(bookings) && bookings.length > 0 ? (
+          <div className="space-y-4">
+            {bookings.map((b, idx) => (
+              <div
+                key={idx}
+                className="rounded-lg shadow-lg/20 bg-white p-4 space-y-2"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-500">
+                    Booking Date: {dayjs(b.booking_date).format("YYYY-MM-DD")}
+                  </span>
+                  <span
+                    className={`px-3 py-1 text-xs rounded-full ${
+                      b.status === "paid"
+                        ? "bg-green-100 text-green-800"
+                        : b.status === "pending"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
+                  >
+                    {b.status}
+                  </span>
+                </div>
+
+                <h3 className="text-lg font-semibold">{b.boat_name}</h3>
+                <p className="text-sm text-gray-600">
+                  Departure: {dayjs(b.departure_time).format("YYYY-MM-DD HH:mm")}
+                </p>
+
+                <div className="text-sm text-gray-700">
+                  <strong>Tickets:</strong>
+                  <ul className="list-disc list-inside">
+                    {b.tickets.split(", ").map((ticket, i) => (
+                      <li key={i}>{ticket}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
+                  <div className="w-screen max-w-lg space-y-4">
+                    <dl className="space-y-0.5 text-sm text-gray-700">
+
+                      <div className="flex justify-between !text-base font-medium">
+                        <dt>Total</dt>
+                        <dd>RM {Number(b.total_price).toFixed(2)}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="p-4 text-center text-gray-500">No bookings found.</p>
+        )}
       </section>
+
 
       {/* Upcoming Schedules*/}
       <section className="mb-8 mt-8">

@@ -12,10 +12,19 @@ class User {
         $this->conn = $db;
     }
 
-    public function getById(int $id): ?array {
-        $stmt = $this->conn->prepare("SELECT * FROM users WHERE user_id = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    public function getById($userId) {
+        $sql = "SELECT 
+                    user_id,
+                    name,
+                    email,
+                    role,
+                    DATE_FORMAT(created_at, '%d %b %Y %H:%i:%s') AS created_at
+                FROM users
+                WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function countAll(): int {

@@ -153,16 +153,25 @@
         public function getBookingsByUser($userId) {
             $stmt = $this->conn->prepare("
                 SELECT 
-                    b.booking_id,
-                    s.schedule_id,
-                    s.departure_time,
-                    b.status
-                FROM bookings b
-                JOIN booking_details bd ON b.booking_id = bd.booking_id
-                JOIN schedules s ON bd.schedule_id = s.schedule_id
-                WHERE b.user_id = ?
-                ORDER BY b.booking_id DESC
-                LIMIT 25
+    b.booking_id,
+    b.booking_date,
+    b.status,
+    bo.name AS boat_name,
+    s.departure_time,
+    GROUP_CONCAT(
+        CONCAT(tt.name, ' x', bd.quantity, ' @', bd.price)
+        ORDER BY tt.name SEPARATOR ', '
+    ) AS tickets,
+    SUM(bd.quantity * bd.price) AS total_price
+FROM bookings b
+JOIN booking_details bd ON b.booking_id = bd.booking_id
+JOIN ticket_types tt ON bd.ticket_type_id = tt.ticket_type_id
+JOIN schedules s ON bd.schedule_id = s.schedule_id
+JOIN boats bo ON s.boat_id = bo.boat_id
+WHERE b.user_id = ?
+GROUP BY 
+    b.booking_id, b.booking_date, b.status, bo.name, s.departure_time
+ORDER BY b.booking_date DESC
             ");
             $stmt->execute([$userId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -24,6 +24,8 @@ import BookingCart from "./pages/user/BookingCart";
 import BookingConfirm from "./pages/user/BookingConfirm";
 import BookingPayment from "./pages/user/BookingPayment";
 import BookingCalendarUser from "./pages/user/BookingCalendarUser";
+import MyBookingList from "./pages/user/MyBookingList";
+import MyProfile from "./pages/user/MyProfile";
 
 
 
@@ -34,7 +36,7 @@ function App() {
 
   return (
     <Router>
-      <div className="p-4">
+
         {/* ✅ Top Navbar */}
         <nav className="space-x-4 mb-4">
 
@@ -45,7 +47,7 @@ function App() {
             </>
           )}
 
-          {role === "user" && <Link to="/" className="text-blue-600">Dashboard</Link>} {/* ✅ added */}
+          {role === "user" && <Link to="/" className="text-blue-600">Dashboard</Link>} 
           {role === "user" && <Link to="/book" className="text-blue-600">Booking Calendar</Link>}
 
           {role === "admin" && (
@@ -64,6 +66,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/book" element={<BookingCalendarUser />} />
+          <Route path="/bookinglist" element={<MyBookingList/>}/>
+          <Route path="/profile" element={<MyProfile/>}/>
           <Route path="/cart" element={<BookingCart />} />
           <Route path="/confirm" element={<BookingConfirm />} />
           <Route path="/payment/:bookingId" element={<BookingPayment />} />
@@ -82,7 +86,7 @@ function App() {
             <Route path="schedule/:scheduleId" element={<AdminRoute><ManageSchedulePriceList/></AdminRoute>} />
           </Route>
         </Routes>
-      </div>
+
     </Router>
   );
 }
