@@ -176,6 +176,18 @@ return(
             </Link>
           )}
         </MenuItem>
+        <MenuItem>
+          {({ active }) => (
+            <Link
+              to="/boatlist"
+              className={`block rounded-lg px-4 py-2 text-sm ${
+                active ? "bg-gray-50 text-gray-700" : "text-gray-500"
+              }`}
+            >
+              Boat List
+            </Link>
+          )}
+        </MenuItem>
       </div>
 
       <div className="p-2">

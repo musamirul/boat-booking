@@ -5,6 +5,9 @@ const BASE_URL = "http://localhost/boat-booking/public/api/user";
 export const getSchedules = () =>
     axios.get(`${BASE_URL}/schedules.php`);
 
+export const getSchedulesByBoat = (boatId) =>
+    axios.get(`${BASE_URL}/schedules.php?boat_id=${boatId}`);
+
 export const addSchedule = (schedule) =>
     axios.post(`${BASE_URL}/schedules.php`,schedule);
 

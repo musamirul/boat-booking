@@ -26,6 +26,8 @@ import BookingPayment from "./pages/user/BookingPayment";
 import BookingCalendarUser from "./pages/user/BookingCalendarUser";
 import MyBookingList from "./pages/user/MyBookingList";
 import MyProfile from "./pages/user/MyProfile";
+import BoatList from "./pages/user/BoatList";
+import BoatSchedule from "./pages/user/BoatSchedule";
 
 
 
@@ -69,7 +71,9 @@ function App() {
           <Route path="/bookinglist" element={<MyBookingList/>}/>
           <Route path="/profile" element={<MyProfile/>}/>
           <Route path="/cart" element={<BookingCart />} />
+          <Route path="/boatlist" element={<BoatList/>}/>
           <Route path="/confirm" element={<BookingConfirm />} />
+          <Route path="/boat/:boatId/schedule" element={<BoatSchedule />} />
           <Route path="/payment/:bookingId" element={<BookingPayment />} />
 
           {/* ✅ Admin Routes with Layout */}

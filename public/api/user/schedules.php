@@ -26,7 +26,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // ✅ GET = Fetch All Schedules with Boat Name + Prices
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $sql = "
+    $boatId = $_GET['boat_id'] ?? null;
+
+    if ($boatId) {
+        $stmt = $db->prepare("
+            SELECT s.schedule_id, s.boat_id, b.name AS boat_name, s.departure_time, s.available_seats,
+                   sp.schedule_price_id, sp.price, tt.ticket_type_id, tt.name AS ticket_type_name
+            FROM schedules s
+            JOIN boats b ON s.boat_id = b.boat_id
+            LEFT JOIN schedule_prices sp ON s.schedule_id = sp.schedule_id
+            LEFT JOIN ticket_types tt ON sp.ticket_type_id = tt.ticket_type_id
+            WHERE s.boat_id = :boat_id
+            ORDER BY s.schedule_id ASC
+        ");
+        $stmt->execute(['boat_id' => $boatId]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Group by schedule_id
+        $schedules = [];
+        foreach ($rows as $r) {
+            $id = $r['schedule_id'];
+            if (!isset($schedules[$id])) {
+                $schedules[$id] = [
+                    'schedule_id' => $r['schedule_id'],
+                    'boat_id' => $r['boat_id'],
+                    'boat_name' => $r['boat_name'],
+                    'departure_time' => $r['departure_time'],
+                    'available_seats' => $r['available_seats'],
+                    'prices' => []
+                ];
+            }
+            if (!empty($r['schedule_price_id'])) {
+                $schedules[$id]['prices'][] = [
+                    'schedule_price_id' => $r['schedule_price_id'],
+                    'ticket_type_id' => $r['ticket_type_id'],
+                    'ticket_type_name' => $r['ticket_type_name'],
+                    'price' => $r['price']
+                ];
+            }
+        }
+
+        echo json_encode(array_values($schedules));
+        exit; // ✅ Make sure we stop here
+    }
+
+    // Fallback: return all schedules if no boat_id
+    $stmt = $db->query("
         SELECT s.schedule_id, s.boat_id, b.name AS boat_name, s.departure_time, s.available_seats,
                sp.schedule_price_id, sp.price, tt.ticket_type_id, tt.name AS ticket_type_name
         FROM schedules s
@@ -34,11 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         LEFT JOIN schedule_prices sp ON s.schedule_id = sp.schedule_id
         LEFT JOIN ticket_types tt ON sp.ticket_type_id = tt.ticket_type_id
         ORDER BY s.schedule_id ASC
-    ";
-    $stmt = $db->query($sql);
+    ");
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // ✅ Group by schedule_id and nest prices
     $schedules = [];
     foreach ($rows as $r) {
         $id = $r['schedule_id'];

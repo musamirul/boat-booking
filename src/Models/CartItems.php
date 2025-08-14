@@ -40,7 +40,7 @@
                         s.departure_time, 
                         b.name AS boat_name, 
                         tt.name AS type_name, 
-                        sp.price
+                        COALESCE(sp.price, 0) AS price
                     FROM cart_items ci
                     INNER JOIN carts c 
                         ON ci.cart_id = c.cart_id
@@ -50,7 +50,7 @@
                         ON s.boat_id = b.boat_id
                     INNER JOIN ticket_types tt 
                         ON ci.ticket_type_id = tt.ticket_type_id
-                    INNER JOIN schedule_prices sp
+                    LEFT JOIN schedule_prices sp
                         ON sp.schedule_id = ci.schedule_id
                         AND sp.ticket_type_id = ci.ticket_type_id
                     WHERE c.user_id = :user_id";
