@@ -163,7 +163,7 @@ export default function UserDashboard() {
 
 
       {/* Upcoming Schedules*/}
-      <section className="mb-8 mt-8">
+      {/* <section className="mb-8 mt-8">
         <h2 className="text-xl font-semibold mb-3">Upcoming Boat Schedules</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {schedules.map((s) => (
@@ -177,11 +177,11 @@ export default function UserDashboard() {
             </div>
           ))}
         </div>
-      </section> 
+      </section>  */}
       
 
       {/* Cart Section*/}
-      {cart.length > 0 && (
+      {/* {cart.length > 0 && (
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-3">Your Cart</h2>
           <table className="w-full border">
@@ -221,10 +221,10 @@ export default function UserDashboard() {
             </button>
           </div>
         </section>
-      )} 
+      )}  */}
 
       {/* Booking Details Modal */}
-      {modalOpen && selectedBooking && (() => {
+      {/* {modalOpen && selectedBooking && (() => {
   const firstDetail = selectedBooking.details?.[0];
 
     return (
@@ -257,7 +257,7 @@ export default function UserDashboard() {
           </div>
         </div>
         );
-      })()}
+      })()} */}
     </div>
     </UserLayout>
   );

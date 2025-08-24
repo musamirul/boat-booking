@@ -131,7 +131,7 @@ return(
         <MenuItem>
           {({ active }) => (
             <Link
-              to="/dashboard"
+              to="/"
               className={`block rounded-lg px-4 py-2 text-sm ${
                 active ? "bg-gray-50 text-gray-700" : "text-gray-500"
               }`}
@@ -164,7 +164,7 @@ return(
             </Link>
           )}
         </MenuItem>
-        <MenuItem>
+        {/* <MenuItem>
           {({ active }) => (
             <Link
               to="/book"
@@ -175,7 +175,7 @@ return(
               Booking Schedule
             </Link>
           )}
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem>
           {({ active }) => (
             <Link

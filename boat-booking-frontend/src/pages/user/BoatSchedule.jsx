@@ -13,9 +13,32 @@ export default function BoatSchedule() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [schedulesForDate, setSchedulesForDate] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
-  const [ticketQty, setTicketQty] = useState({ adult: 0, child: 0 });
+  //const [ticketQty, setTicketQty] = useState({ adult: 0, child: 0 });
+  const [ticketPrices, setTicketPrices] = useState([]);
+  const [ticketQty, setTicketQty] = useState([]);
   const { userId } = useAuth();
   const navigate = useNavigate();
+
+
+  //When user selects schedule, setprices from backend
+  useEffect(()=>{
+    if(selectedSchedule){
+      const schedule = schedulesForDate.find(s=>s.schedule_id === selectedSchedule);
+      if(schedule && schedule.prices){
+        setTicketPrices(schedule.prices);
+
+        //Initialize ticketQty with all available ticket types set to 0
+        const qtyInit = {};
+        schedule.prices.forEach(p=>{
+          qtyInit[p.ticket_type_id]=0;
+        });
+        setTicketQty(qtyInit);
+      }
+    }else{
+      setTicketPrices([]);
+      setTicketQty([]);
+    }
+  },[selectedSchedule,schedulesForDate]);
 
   // Fetch all schedules for this boat
   useEffect(() => {
@@ -49,27 +72,28 @@ export default function BoatSchedule() {
 
   // Add tickets to cart
   const handleAddToCart = async () => {
-    if (!selectedSchedule || (ticketQty.adult === 0 && ticketQty.child === 0)) {
-      alert("Please select a schedule and at least one ticket.");
+    if (!selectedSchedule) {
+      alert("Please select a schedule.");
       return;
     }
 
     const requests = [];
-    if (ticketQty.adult > 0) {
-      requests.push(addToCart({
-        user_id: userId,
-        schedule_id: selectedSchedule,
-        ticket_type_id: 1, // adult
-        quantity: ticketQty.adult
-      }));
+    for (const [ticket_type_id, qty] of Object.entries(ticketQty)) {
+      if (qty > 0) {
+        requests.push(
+          addToCart({
+            user_id: userId,
+            schedule_id: selectedSchedule,
+            ticket_type_id: parseInt(ticket_type_id),
+            quantity: qty,
+          })
+        );
+      }
     }
-    if (ticketQty.child > 0) {
-      requests.push(addToCart({
-        user_id: userId,
-        schedule_id: selectedSchedule,
-        ticket_type_id: 2, // child
-        quantity: ticketQty.child
-      }));
+
+    if (requests.length === 0) {
+      alert("Please select at least one ticket.");
+      return;
     }
 
     await Promise.all(requests);
@@ -115,7 +139,7 @@ export default function BoatSchedule() {
         )}
 
         {/* Ticket selection */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block mb-2 text-sm font-medium text-gray-700">Adult Tickets:</label>
           <input
             type="number"
@@ -135,12 +159,73 @@ export default function BoatSchedule() {
             onChange={(e) => setTicketQty({ ...ticketQty, child: parseInt(e.target.value) || 0 })}
             min="0"
           />
-        </div>
+        </div> */}
+        {ticketPrices.length > 0 && selectedSchedule && (
+        <div className="space-y-4">
+          {ticketPrices.map(p => {
+            const schedule = schedulesForDate.find(s => s.schedule_id === selectedSchedule);
+            const maxSeats = schedule ? schedule.available_seats : 0;
 
-        <button
+            const totalBooked = Object.values(ticketQty).reduce(
+              (sum, qty) => sum + (qty || 0),
+              0
+            );
+            const remainingSeats = Math.max(0, maxSeats - totalBooked);
+
+            return (
+              <div key={p.ticket_type_id} className="mb-4">
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+                  {p.ticket_type_name} Tickets (RM {p.price}):
+                </label>
+                <input
+                  type="number"
+                  className="border mt-0.5 p-2 w-full rounded border-gray-300 shadow-sm sm:text-lg"
+                  value={ticketQty[p.ticket_type_id] ?? ""}
+                  onChange={e => {
+                    let val = e.target.value;
+                    let parsed = val === "" ? "" : parseInt(val, 10) || 0;
+
+                    // calculate current total excluding this ticket type
+                    const otherTotal = Object.entries(ticketQty)
+                      .filter(([id]) => id !== String(p.ticket_type_id))
+                      .reduce((sum, [, qty]) => sum + (qty || 0), 0);
+
+                    // ✅ enforce combined total ≤ maxSeats
+                    if (parsed + otherTotal > maxSeats) {
+                      parsed = Math.max(0, maxSeats - otherTotal);
+                    }
+
+                    setTicketQty({
+                      ...ticketQty,
+                      [p.ticket_type_id]: parsed
+                    });
+                  }}
+                  min="0"
+                />
+                {/* ✅ Helper text */}
+                <p className="text-sm text-gray-500 mt-1">
+                  Remaining seats: {remainingSeats}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+        {/* <button
           onClick={handleAddToCart}
           className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
           disabled={!selectedSchedule || (ticketQty.adult === 0 && ticketQty.child === 0)}
+        >
+          Add to Cart
+        </button> */}
+        <button
+          onClick={handleAddToCart}
+          className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
+          disabled={
+            !selectedSchedule ||
+            Object.values(ticketQty).every(qty => qty === 0 || qty === "" || qty == null)
+          }
         >
           Add to Cart
         </button>
